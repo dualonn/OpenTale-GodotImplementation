@@ -152,11 +152,6 @@ public partial class Chunk : Node3D
 
     private void GenerateVoxels()
 {
-    // Floating island noise
-    FastNoiseLite islandNoise3D = new FastNoiseLite();
-    islandNoise3D.NoiseType = FastNoiseLite.NoiseTypeEnum.Perlin;
-    islandNoise3D.SetFrequency(0.03f); // controls overall island size
-    islandNoise3D.SetSeed(24680);
 
     for (int x = 0; x < ChunkSize_Horizontal; x++)
     {
@@ -203,29 +198,6 @@ public partial class Chunk : Node3D
 
                     if (y == terrainHeight && surfaceOpeningNoise.GetNoise2D(worldX, worldZ) > 0.85f)
                         type = VoxelType.Air;
-                }
-
-                // --- Floating islands ---
-                if (y >= 350 && y <= 450)
-                {
-                    // 2D noise for horizontal island shape
-                    float nx = worldX * 0.03f; // tweak for width/length
-                    float nz = worldZ * 0.03f;
-                    float islandShape = islandNoise3D.GetNoise2D(worldX, worldZ);
-
-                    // Taper Y to make islands thicker in the middle
-                    float yNorm = (y - 350f) / 100f; // 0 at bottom, 1 at top
-                    float yTaper = 1f - Mathf.Abs(yNorm - 0.5f) * 2f; // peak at middle, 0 at edges
-
-                    float density = islandShape + yTaper - 0.3f; // tweak -0.3f for overall thickness
-                    if (density > 0f)
-                    {
-                        // Top layer grass
-                        if (y == 450 || (y < 450 && (y + 1 > 450 || density + 0.05f < 0))) 
-                            type = VoxelType.Grass;
-                        else
-                            type = VoxelType.Stone;
-                    }
                 }
 
                 // --- Bottom limit ---
