@@ -1,0 +1,61 @@
+[gd_scene load_steps=9 format=3 uid="uid://dctyb3gjragqp"]
+
+[ext_resource type="Script" uid="uid://b1pbamyquwkim" path="res://Scripts/Main.cs" id="1_glv2v"]
+[ext_resource type="Script" uid="uid://cfo7k6kfdjles" path="res://Scripts/World.cs" id="2_uu6xs"]
+[ext_resource type="PackedScene" uid="uid://ckymd86730w7l" path="res://Player.tscn" id="3_r0du0"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_r0du0"]
+
+[sub_resource type="Sky" id="Sky_cm0pq"]
+sky_material = SubResource("ProceduralSkyMaterial_r0du0")
+
+[sub_resource type="Environment" id="Environment_fos0i"]
+background_mode = 2
+sky = SubResource("Sky_cm0pq")
+ambient_light_color = Color(1, 1, 1, 1)
+fog_enabled = true
+fog_mode = 1
+fog_density = 1.0
+fog_sky_affect = 0.5
+fog_depth_begin = 112.0
+fog_depth_end = 132.0
+
+[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_3dxm6"]
+
+[sub_resource type="Compositor" id="Compositor_lgr22"]
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_glv2v")
+
+[node name="World" type="Node3D" parent="."]
+script = ExtResource("2_uu6xs")
+
+[node name="Player" parent="." node_paths=PackedStringArray("world") instance=ExtResource("3_r0du0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 100, 0)
+speed = 4.0
+GravityScale = 16.0
+world = NodePath("../World")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_fos0i")
+camera_attributes = SubResource("CameraAttributesPhysical_3dxm6")
+compositor = SubResource("Compositor_lgr22")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -27.5
+offset_top = -66.0
+offset_right = 27.5
+offset_bottom = 66.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 48
+text = "+"
+horizontal_alignment = 1
+vertical_alignment = 1
