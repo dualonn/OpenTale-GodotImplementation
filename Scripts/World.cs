@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using VoxelEngine.Scripts;
 
 public partial class World : Node3D
 {
@@ -11,9 +12,14 @@ public partial class World : Node3D
 	private System.Collections.Generic.Dictionary<Vector2I, Chunk> chunks = new();
 	private Queue<Vector2I> loadQueue = new();
 	public Player player;
+	public NoiseManager noiseManager;
 
 	public override void _Ready()
 	{
+		if (NoiseManager.Instance == null)
+		{
+			noiseManager = NoiseManager.Instance;
+		}
 		chunk_scene = GD.Load<PackedScene>("res://Chunk.tscn");
 
 		player = GetNode<Player>("../Player");
@@ -53,8 +59,8 @@ public partial class World : Node3D
 	{
 		if (player == null) return;
 
-		int playerChunkX = Mathf.FloorToInt(player.GlobalPosition.X / Chunk.ChunkSize_Horizontal);
-		int playerChunkZ = Mathf.FloorToInt(player.GlobalPosition.Z / Chunk.ChunkSize_Horizontal);
+		int playerChunkX = Mathf.FloorToInt(player.GlobalPosition.X / Chunk.ChunkSizeHorizontal);
+		int playerChunkZ = Mathf.FloorToInt(player.GlobalPosition.Z / Chunk.ChunkSizeHorizontal);
 		
 		for (int x = -RenderDistance; x <= RenderDistance; x++)
 		{
@@ -92,13 +98,13 @@ public partial class World : Node3D
 
 		Chunk chunk = chunk_scene.Instantiate<Chunk>();
 
-		chunk.world_x = cx;
-		chunk.world_z = cz;
+		chunk.worldX = cx;
+		chunk.worldZ = cz;
 
 		chunk.Position = new Vector3(
-			cx * Chunk.ChunkSize_Horizontal,
+			cx * Chunk.ChunkSizeHorizontal,
 			0,
-			cz * Chunk.ChunkSize_Horizontal
+			cz * Chunk.ChunkSizeHorizontal
 		);
 		
 		AddChild(chunk);
@@ -118,8 +124,8 @@ public partial class World : Node3D
 		int bz = Mathf.RoundToInt(worldPos.Z);
 
 		// Which chunk?
-		int cx = Mathf.FloorToInt((float)bx / Chunk.ChunkSize_Horizontal);
-		int cz = Mathf.FloorToInt((float)bz / Chunk.ChunkSize_Horizontal);
+		int cx = Mathf.FloorToInt((float)bx / Chunk.ChunkSizeHorizontal);
+		int cz = Mathf.FloorToInt((float)bz / Chunk.ChunkSizeHorizontal);
 
 		chunkCoord = new Vector2I(cx, cz);
 
@@ -131,13 +137,13 @@ public partial class World : Node3D
 		}
 
 		// Local block coords inside chunk
-		int localX = bx - cx * Chunk.ChunkSize_Horizontal;
-		int localZ = bz - cz * Chunk.ChunkSize_Horizontal;
+		int localX = bx - cx * Chunk.ChunkSizeHorizontal;
+		int localZ = bz - cz * Chunk.ChunkSizeHorizontal;
 
 		// Bounds check (ALL out-of-range returns must set blockPos)
-		if (localX < 0 || localX >= Chunk.ChunkSize_Horizontal ||
-		    by < 0      || by >= Chunk.ChunkSize_Vertical   ||
-		    localZ < 0 || localZ >= Chunk.ChunkSize_Horizontal)
+		if (localX < 0 || localX >= Chunk.ChunkSizeHorizontal ||
+		    by < 0      || by >= Chunk.ChunkSizeVertical   ||
+		    localZ < 0 || localZ >= Chunk.ChunkSizeHorizontal)
 		{
 			blockPos = default;
 			return false;

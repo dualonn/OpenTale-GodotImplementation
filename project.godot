@@ -15,6 +15,10 @@ run/main_scene="uid://dctyb3gjragqp"
 config/features=PackedStringArray("4.5", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+NoiseManager="*res://Scripts/NoiseManager.cs"
+
 [dotnet]
 
 project/assembly_name="VoxelEngine"

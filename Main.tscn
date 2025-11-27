@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://dctyb3gjragqp"]
+[gd_scene load_steps=10 format=3 uid="uid://dctyb3gjragqp"]
 
 [ext_resource type="Script" uid="uid://b1pbamyquwkim" path="res://Scripts/Main.cs" id="1_glv2v"]
 [ext_resource type="Script" uid="uid://cfo7k6kfdjles" path="res://Scripts/World.cs" id="2_uu6xs"]
+[ext_resource type="Script" uid="uid://bry3pfmyv7ora" path="res://Scripts/NoiseManager.cs" id="3_cm0pq"]
 [ext_resource type="PackedScene" uid="uid://ckymd86730w7l" path="res://Player.tscn" id="3_r0du0"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_r0du0"]
@@ -29,6 +30,9 @@ script = ExtResource("1_glv2v")
 
 [node name="World" type="Node3D" parent="."]
 script = ExtResource("2_uu6xs")
+
+[node name="Node" type="Node" parent="World"]
+script = ExtResource("3_cm0pq")
 
 [node name="Player" parent="." node_paths=PackedStringArray("world") instance=ExtResource("3_r0du0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 100, 0)
