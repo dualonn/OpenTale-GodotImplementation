@@ -79,6 +79,18 @@ public partial class Chunk : Node3D
             case 4:
                 type = VoxelType.DepthRock;
                 break;
+            case 5:
+                type = VoxelType.Sand;
+                break;
+            case 6:
+                type = VoxelType.OakLog;
+                break;
+            case 7:
+                type = VoxelType.OakPlanks;
+                break;
+            case 8:
+                type = VoxelType.Glass;
+                break;
         }
         
         voxels[x, y, z] = new Voxel { type = type };
@@ -159,6 +171,8 @@ public partial class Chunk : Node3D
         var uvs = new List<Vector2>();
 
         int index = 0;
+        
+        var mat = new StandardMaterial3D();
 
         for (int x = 0; x < ChunkSizeHorizontal; x++)
         {
@@ -171,20 +185,23 @@ public partial class Chunk : Node3D
                     Vector3 position = new Vector3(x, y, z);
                     
                     //add faces only if neighbors are solid or border block
-                    if (y == ChunkSizeVertical - 1 || !voxels[x, y + 1, z].IsSolid) 
+                    if (y == ChunkSizeVertical - 1 || !voxels[x, y + 1, z].IsSolid || (blocks[x, y + 1, z] == 8 && blocks[x, y, z] != 8)) 
                         AddFace(vertices, indices, normals, uvs, position, Vector3.Up, voxels[x, y, z].type, ref index);
-                    if (y == 0 || !voxels[x, y - 1, z].IsSolid)
+                    if (y == 0 || !voxels[x, y - 1, z].IsSolid || (blocks[x, y - 1, z] == 8 && blocks[x, y, z] != 8))
                         AddFace(vertices, indices, normals, uvs, position, Vector3.Down, voxels[x, y, z].type, ref index);
                     
-                    if (x == 0 || !voxels[x - 1, y, z].IsSolid)
+                    if (x == 0 || !voxels[x - 1, y, z].IsSolid || (blocks[x - 1, y, z] == 8 && blocks[x, y, z] != 8))
                         AddFace(vertices, indices, normals, uvs, position, Vector3.Left, voxels[x, y, z].type, ref index);
-                    if (x == ChunkSizeHorizontal - 1 || !voxels[x + 1, y, z].IsSolid)
+                    if (x == ChunkSizeHorizontal - 1 || !voxels[x + 1, y, z].IsSolid || (blocks[x + 1, y, z] == 8 && blocks[x, y, z] != 8))
                         AddFace(vertices, indices, normals, uvs, position, Vector3.Right, voxels[x, y, z].type, ref index);
                     
-                    if (z == 0 || !voxels[x, y, z - 1].IsSolid)
+                    if (z == 0 || !voxels[x, y, z - 1].IsSolid || (blocks[x, y, z - 1] == 8 && blocks[x, y, z] != 8))
                         AddFace(vertices, indices, normals, uvs, position, Vector3.Back, voxels[x, y, z].type, ref index);
-                    if (z == ChunkSizeHorizontal - 1 || !voxels[x, y, z + 1].IsSolid)
+                    if (z == ChunkSizeHorizontal - 1 || !voxels[x, y, z + 1].IsSolid || (blocks[x, y, z + 1] == 8 && blocks[x, y, z] != 8))
                         AddFace(vertices, indices, normals, uvs, position, Vector3.Forward, voxels[x, y, z].type, ref index);
+                    
+                    if(GetBlock(x, y, z) == 8)
+                        mat.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;
                 }
             }
         }
@@ -199,8 +216,7 @@ public partial class Chunk : Node3D
         var mesh = new ArrayMesh();
         mesh.AddSurfaceFromArrays(ArrayMesh.PrimitiveType.Triangles, arrays);
         meshInstance.Mesh = mesh;
-
-        var mat = new StandardMaterial3D();
+        
         mat.AlbedoTexture = Godot.ResourceLoader.Load<Texture2D>("res://Textures/TextureAtlas.png");
         mat.TextureFilter = BaseMaterial3D.TextureFilterEnum.Nearest;
         mat.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
@@ -222,7 +238,7 @@ public partial class Chunk : Node3D
     //gets textures for each face per voxel type
     private Vector2[] GetFaceTextures(VoxelType type, Vector3 dir)
     {
-        int atlasCols = 6;
+        int atlasCols = 11;
         float texSize = 1f / atlasCols;
 
         int tileIndex = 0;
@@ -240,6 +256,18 @@ public partial class Chunk : Node3D
                 break;
             case VoxelType.DepthRock:
                 tileIndex = 5;
+                break;
+            case VoxelType.Sand:
+                tileIndex = 6;
+                break;
+            case VoxelType.OakLog:
+                tileIndex = (dir == Vector3.Up || dir == Vector3.Down) ? 8 : 7;
+                break;
+            case VoxelType.OakPlanks:
+                tileIndex = 9;
+                break;
+            case VoxelType.Glass:
+                tileIndex = 10;
                 break;
         }
 

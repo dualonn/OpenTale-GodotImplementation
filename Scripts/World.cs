@@ -6,7 +6,7 @@ using VoxelEngine.Scripts;
 
 public partial class World : Node3D
 {
-	public const int RenderDistance = 8;
+	[Export] public int RenderDistance = 12;
 	public PackedScene chunk_scene;
 
 	private System.Collections.Generic.Dictionary<Vector2I, Chunk> chunks = new();

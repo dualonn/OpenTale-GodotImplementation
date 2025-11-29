@@ -8,6 +8,10 @@ public enum VoxelType
 	Grass,
 	Stone,
 	DepthRock,
+	Sand,
+	OakLog,
+	OakPlanks,
+	Glass,
 }
 
 public struct Voxel

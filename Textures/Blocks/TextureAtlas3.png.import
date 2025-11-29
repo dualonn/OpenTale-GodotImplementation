@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://blcupdbdrag31"
-path="res://.godot/imported/TextureAtlas.png-35de43bc1c14480861bde257e38af95a.ctex"
+uid="uid://5hj6lcoj216l"
+path="res://.godot/imported/TextureAtlas3.png-1ce5d26b9efcc547b06144999cf2e348.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/TextureAtlas.png"
-dest_files=["res://.godot/imported/TextureAtlas.png-35de43bc1c14480861bde257e38af95a.ctex"]
+source_file="res://Textures/Blocks/TextureAtlas3.png"
+dest_files=["res://.godot/imported/TextureAtlas3.png-1ce5d26b9efcc547b06144999cf2e348.ctex"]
 
 [params]
 

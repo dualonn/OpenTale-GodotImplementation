@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://blcupdbdrag31"
-path="res://.godot/imported/TextureAtlas.png-35de43bc1c14480861bde257e38af95a.ctex"
+uid="uid://cdo10r1mwmjpx"
+path="res://.godot/imported/CloudsMask.exr-a4dc82dfc63f5190d03b4cb0c51c469e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/TextureAtlas.png"
-dest_files=["res://.godot/imported/TextureAtlas.png-35de43bc1c14480861bde257e38af95a.ctex"]
+source_file="res://CloudsMask.exr"
+dest_files=["res://.godot/imported/CloudsMask.exr-a4dc82dfc63f5190d03b4cb0c51c469e.ctex"]
 
 [params]
 
