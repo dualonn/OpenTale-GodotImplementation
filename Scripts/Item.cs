@@ -9,11 +9,9 @@ public partial class Item: Resource
 {
 	[Export] public Texture2D Icon;
 	[Export] public string Name;
-	[Export] public bool Stackable;
-	[Export] public int MaxStack;
-	[Export] public bool IsBlock;
+	[Export] public bool Stackable = true;
+	[Export] public int MaxStack = 256;
+	[Export] public bool IsBlock = true;
 	[Export] public VoxelType BlockType;
 	[Export] public string InternalID;
-	[Export] public Array<Item> itemLibrary { get; set; } = new Array<Item>();
-	public Array<Item> ItemLibrary => itemLibrary;
 }

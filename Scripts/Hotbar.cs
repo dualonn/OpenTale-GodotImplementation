@@ -9,12 +9,12 @@ public partial class Hotbar : Control
 	private const int HotbarSize = 9;
 	public List<Item> items = new();
 	private int selectedIndex = 0;
-	//public Item SelectedItem => items[selectedIndex];
+	public Item SelectedItem => items[selectedIndex];
+	[Export] public ItemDatabase ItemDatabase;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		//var itemLib = Item.ItemLibrary;
 		for (int i = 0; i < HotbarSize; i++)
 		{
 			items.Add(null);
@@ -23,7 +23,14 @@ public partial class Hotbar : Control
 		UpdateHotbar();
 		HighlightSelection();
 		
-		//SetItem(0, Item.ItemLibrary[0]);
+		SetItem(0, ItemDatabase.Items[0]);
+		SetItem(1, ItemDatabase.Items[1]);
+		SetItem(2, ItemDatabase.Items[2]);
+		SetItem(3, ItemDatabase.Items[3]);
+		SetItem(4, ItemDatabase.Items[4]);
+		SetItem(5, ItemDatabase.Items[5]);
+		SetItem(6, ItemDatabase.Items[6]);
+		SetItem(7, ItemDatabase.Items[7]);
 	}
 
 	public override void _Input(InputEvent @event)
@@ -71,17 +78,16 @@ public partial class Hotbar : Control
 	{
 		for (int i = 0; i < HotbarSize; i++)
 		{
-			var slot = GetChild<Control>(i);
-			var iconRect = slot.GetNode<TextureRect>("Icon");
+			var slot = GetChild<TextureRect>(i);
 
 			if (items[i] != null)
 			{
-				iconRect.Texture = items[i].Icon;
-				iconRect.Visible = true;
+				slot.Texture = items[i].Icon;
+				slot.Visible = true;
 			}
 			else
 			{
-				iconRect.Visible = false;
+				slot.Visible = false;
 			}
 		}
 	}

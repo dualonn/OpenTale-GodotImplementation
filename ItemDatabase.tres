@@ -1,0 +1,81 @@
+[gd_resource type="Resource" script_class="ItemDatabase" load_steps=19 format=3 uid="uid://c82ljp7x5jfb2"]
+
+[ext_resource type="Texture2D" uid="uid://d3lsxh5igk7j1" path="res://Textures/Blocks/TextureAtlas1.png" id="1_d1htk"]
+[ext_resource type="Script" uid="uid://duqqm842pct3u" path="res://Scripts/ItemDatabase.cs" id="1_qu5ds"]
+[ext_resource type="Script" uid="uid://b640rncrs4kru" path="res://Scripts/Item.cs" id="2_wl1ju"]
+[ext_resource type="Texture2D" uid="uid://bje8ae0b8bwp0" path="res://Textures/Blocks/TextureAtlas4.png" id="3_kp52e"]
+[ext_resource type="Texture2D" uid="uid://8eorw4adsqef" path="res://Textures/Blocks/TextureAtlas5.png" id="4_b8t8a"]
+[ext_resource type="Texture2D" uid="uid://cl7b8ofnkpdx7" path="res://Textures/Blocks/TextureAtlas6.png" id="5_unmpf"]
+[ext_resource type="Texture2D" uid="uid://gmxp776q6s00" path="res://Textures/Blocks/TextureAtlas7.png" id="6_lkx6y"]
+[ext_resource type="Texture2D" uid="uid://bvb05ubssivjk" path="res://Textures/Blocks/TextureAtlas9.png" id="7_1li0v"]
+[ext_resource type="Texture2D" uid="uid://ramg0xedqqje" path="res://Textures/Blocks/TextureAtlas10.png" id="8_m4lry"]
+[ext_resource type="Texture2D" uid="uid://crds4jtqhrjj1" path="res://Textures/Blocks/TextureAtlas11.png" id="9_ksp8h"]
+
+[sub_resource type="Resource" id="Resource_pknls"]
+script = ExtResource("2_wl1ju")
+Icon = ExtResource("1_d1htk")
+Name = "Dirt"
+BlockType = 1
+InternalID = "1"
+metadata/_custom_type_script = "uid://b640rncrs4kru"
+
+[sub_resource type="Resource" id="Resource_0rrt2"]
+script = ExtResource("2_wl1ju")
+Icon = ExtResource("3_kp52e")
+Name = "Grass Block"
+BlockType = 2
+InternalID = "2"
+metadata/_custom_type_script = "uid://b640rncrs4kru"
+
+[sub_resource type="Resource" id="Resource_is4v4"]
+script = ExtResource("2_wl1ju")
+Icon = ExtResource("4_b8t8a")
+Name = "Stone"
+BlockType = 3
+InternalID = "3"
+metadata/_custom_type_script = "uid://b640rncrs4kru"
+
+[sub_resource type="Resource" id="Resource_ghq4j"]
+script = ExtResource("2_wl1ju")
+Icon = ExtResource("5_unmpf")
+Name = "Depthrock"
+BlockType = 4
+InternalID = "4"
+metadata/_custom_type_script = "uid://b640rncrs4kru"
+
+[sub_resource type="Resource" id="Resource_d22ue"]
+script = ExtResource("2_wl1ju")
+Icon = ExtResource("6_lkx6y")
+Name = "Sand"
+BlockType = 5
+InternalID = "5"
+metadata/_custom_type_script = "uid://b640rncrs4kru"
+
+[sub_resource type="Resource" id="Resource_4ny7f"]
+script = ExtResource("2_wl1ju")
+Icon = ExtResource("7_1li0v")
+Name = "Oak Log"
+BlockType = 6
+InternalID = "6"
+metadata/_custom_type_script = "uid://b640rncrs4kru"
+
+[sub_resource type="Resource" id="Resource_8hjqv"]
+script = ExtResource("2_wl1ju")
+Icon = ExtResource("8_m4lry")
+Name = "Oak Planks"
+BlockType = 7
+InternalID = "7"
+metadata/_custom_type_script = "uid://b640rncrs4kru"
+
+[sub_resource type="Resource" id="Resource_2m3pq"]
+script = ExtResource("2_wl1ju")
+Icon = ExtResource("9_ksp8h")
+Name = "Glass"
+BlockType = 8
+InternalID = "8"
+metadata/_custom_type_script = "uid://b640rncrs4kru"
+
+[resource]
+script = ExtResource("1_qu5ds")
+Items = Array[Object]([SubResource("Resource_pknls"), SubResource("Resource_0rrt2"), SubResource("Resource_is4v4"), SubResource("Resource_ghq4j"), SubResource("Resource_d22ue"), SubResource("Resource_4ny7f"), SubResource("Resource_8hjqv"), SubResource("Resource_2m3pq")])
+metadata/_custom_type_script = "uid://duqqm842pct3u"
