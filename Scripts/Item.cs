@@ -13,5 +13,5 @@ public partial class Item: Resource
 	[Export] public int MaxStack = 256;
 	[Export] public bool IsBlock = true;
 	[Export] public VoxelType BlockType;
-	[Export] public string InternalID;
+	[Export] public int InternalID;
 }

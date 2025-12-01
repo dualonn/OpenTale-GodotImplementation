@@ -13,7 +13,7 @@ public partial class Player : CharacterBody3D
 	private Vector2 look;
 	[Export] public World world;
 	[Export] public float interactionDistance = 6f;
-	[Export] public int selectedBlock;
+	[Export] public Hotbar hotbar;
 	public override void _Ready()
 	{
 		cam = GetNode<Camera3D>("Camera3D");
@@ -88,7 +88,7 @@ public partial class Player : CharacterBody3D
 				BreakBlock(breakTarget);
 
 			if (Input.IsActionJustPressed("interact"))
-				PlaceBlock(placeTarget, (byte)selectedBlock);
+				PlaceBlock(placeTarget, (byte)hotbar.SelectedItem.InternalID);
 		}
 	}
 

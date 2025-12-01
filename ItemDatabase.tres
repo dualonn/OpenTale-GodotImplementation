@@ -16,7 +16,7 @@ script = ExtResource("2_wl1ju")
 Icon = ExtResource("1_d1htk")
 Name = "Dirt"
 BlockType = 1
-InternalID = "1"
+InternalID = 1
 metadata/_custom_type_script = "uid://b640rncrs4kru"
 
 [sub_resource type="Resource" id="Resource_0rrt2"]
@@ -24,7 +24,7 @@ script = ExtResource("2_wl1ju")
 Icon = ExtResource("3_kp52e")
 Name = "Grass Block"
 BlockType = 2
-InternalID = "2"
+InternalID = 2
 metadata/_custom_type_script = "uid://b640rncrs4kru"
 
 [sub_resource type="Resource" id="Resource_is4v4"]
@@ -32,7 +32,7 @@ script = ExtResource("2_wl1ju")
 Icon = ExtResource("4_b8t8a")
 Name = "Stone"
 BlockType = 3
-InternalID = "3"
+InternalID = 3
 metadata/_custom_type_script = "uid://b640rncrs4kru"
 
 [sub_resource type="Resource" id="Resource_ghq4j"]
@@ -40,7 +40,7 @@ script = ExtResource("2_wl1ju")
 Icon = ExtResource("5_unmpf")
 Name = "Depthrock"
 BlockType = 4
-InternalID = "4"
+InternalID = 4
 metadata/_custom_type_script = "uid://b640rncrs4kru"
 
 [sub_resource type="Resource" id="Resource_d22ue"]
@@ -48,7 +48,7 @@ script = ExtResource("2_wl1ju")
 Icon = ExtResource("6_lkx6y")
 Name = "Sand"
 BlockType = 5
-InternalID = "5"
+InternalID = 5
 metadata/_custom_type_script = "uid://b640rncrs4kru"
 
 [sub_resource type="Resource" id="Resource_4ny7f"]
@@ -56,7 +56,7 @@ script = ExtResource("2_wl1ju")
 Icon = ExtResource("7_1li0v")
 Name = "Oak Log"
 BlockType = 6
-InternalID = "6"
+InternalID = 6
 metadata/_custom_type_script = "uid://b640rncrs4kru"
 
 [sub_resource type="Resource" id="Resource_8hjqv"]
@@ -64,7 +64,7 @@ script = ExtResource("2_wl1ju")
 Icon = ExtResource("8_m4lry")
 Name = "Oak Planks"
 BlockType = 7
-InternalID = "7"
+InternalID = 7
 metadata/_custom_type_script = "uid://b640rncrs4kru"
 
 [sub_resource type="Resource" id="Resource_2m3pq"]
@@ -72,7 +72,7 @@ script = ExtResource("2_wl1ju")
 Icon = ExtResource("9_ksp8h")
 Name = "Glass"
 BlockType = 8
-InternalID = "8"
+InternalID = 8
 metadata/_custom_type_script = "uid://b640rncrs4kru"
 
 [resource]

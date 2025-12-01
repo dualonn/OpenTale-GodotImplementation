@@ -35,6 +35,7 @@ public partial class Chunk : Node3D
         colliderShape = new CollisionShape3D();
         collider.AddChild(colliderShape);
         collider.AddChild(meshInstance);
+        AddChild(collider);
 
         GenerateBlocks();
         BuildMesh();
@@ -95,6 +96,12 @@ public partial class Chunk : Node3D
         
         voxels[x, y, z] = new Voxel { type = type };
         BuildMesh();
+    }
+
+    //checks if a block type is transparent
+    private bool IsTransparent(byte blockType)
+    {
+        return blockType == 8; // Glass
     }
 
     //computes weights for biomes
@@ -164,15 +171,19 @@ public partial class Chunk : Node3D
     //function that builds meshes from voxel data
     private void BuildMesh()
     {
-        var arrays = new Array();
-        var vertices = new List<Vector3>();
-        var indices = new List<int>();
-        var normals = new List<Vector3>();
-        var uvs = new List<Vector2>();
+        // Opaque mesh data
+        var opaqueVertices = new List<Vector3>();
+        var opaqueIndices = new List<int>();
+        var opaqueNormals = new List<Vector3>();
+        var opaqueUvs = new List<Vector2>();
+        int opaqueIndex = 0;
 
-        int index = 0;
-        
-        var mat = new StandardMaterial3D();
+        // Transparent mesh data
+        var transparentVertices = new List<Vector3>();
+        var transparentIndices = new List<int>();
+        var transparentNormals = new List<Vector3>();
+        var transparentUvs = new List<Vector2>();
+        int transparentIndex = 0;
 
         for (int x = 0; x < ChunkSizeHorizontal; x++)
         {
@@ -183,46 +194,90 @@ public partial class Chunk : Node3D
                     if (!voxels[x, y, z].IsSolid) continue;
 
                     Vector3 position = new Vector3(x, y, z);
+                    byte currentBlock = blocks[x, y, z];
+                    bool isCurrentTransparent = IsTransparent(currentBlock);
+
+                    // Choose which mesh to add faces to
+                    var targetVertices = isCurrentTransparent ? transparentVertices : opaqueVertices;
+                    var targetIndices = isCurrentTransparent ? transparentIndices : opaqueIndices;
+                    var targetNormals = isCurrentTransparent ? transparentNormals : opaqueNormals;
+                    var targetUvs = isCurrentTransparent ? transparentUvs : opaqueUvs;
+                    ref int targetIndex = ref (isCurrentTransparent ? ref transparentIndex : ref opaqueIndex);
                     
                     //add faces only if neighbors are solid or border block
-                    if (y == ChunkSizeVertical - 1 || !voxels[x, y + 1, z].IsSolid || (blocks[x, y + 1, z] == 8 && blocks[x, y, z] != 8)) 
-                        AddFace(vertices, indices, normals, uvs, position, Vector3.Up, voxels[x, y, z].type, ref index);
-                    if (y == 0 || !voxels[x, y - 1, z].IsSolid || (blocks[x, y - 1, z] == 8 && blocks[x, y, z] != 8))
-                        AddFace(vertices, indices, normals, uvs, position, Vector3.Down, voxels[x, y, z].type, ref index);
+                    if (y == ChunkSizeVertical - 1 || !voxels[x, y + 1, z].IsSolid || (IsTransparent(blocks[x, y + 1, z]) && !isCurrentTransparent)) 
+                        AddFace(targetVertices, targetIndices, targetNormals, targetUvs, position, Vector3.Up, voxels[x, y, z].type, ref targetIndex);
+                    if (y == 0 || !voxels[x, y - 1, z].IsSolid || (IsTransparent(blocks[x, y - 1, z]) && !isCurrentTransparent))
+                        AddFace(targetVertices, targetIndices, targetNormals, targetUvs, position, Vector3.Down, voxels[x, y, z].type, ref targetIndex);
                     
-                    if (x == 0 || !voxels[x - 1, y, z].IsSolid || (blocks[x - 1, y, z] == 8 && blocks[x, y, z] != 8))
-                        AddFace(vertices, indices, normals, uvs, position, Vector3.Left, voxels[x, y, z].type, ref index);
-                    if (x == ChunkSizeHorizontal - 1 || !voxels[x + 1, y, z].IsSolid || (blocks[x + 1, y, z] == 8 && blocks[x, y, z] != 8))
-                        AddFace(vertices, indices, normals, uvs, position, Vector3.Right, voxels[x, y, z].type, ref index);
+                    if (x == 0 || !voxels[x - 1, y, z].IsSolid || (IsTransparent(blocks[x - 1, y, z]) && !isCurrentTransparent))
+                        AddFace(targetVertices, targetIndices, targetNormals, targetUvs, position, Vector3.Left, voxels[x, y, z].type, ref targetIndex);
+                    if (x == ChunkSizeHorizontal - 1 || !voxels[x + 1, y, z].IsSolid || (IsTransparent(blocks[x + 1, y, z]) && !isCurrentTransparent))
+                        AddFace(targetVertices, targetIndices, targetNormals, targetUvs, position, Vector3.Right, voxels[x, y, z].type, ref targetIndex);
                     
-                    if (z == 0 || !voxels[x, y, z - 1].IsSolid || (blocks[x, y, z - 1] == 8 && blocks[x, y, z] != 8))
-                        AddFace(vertices, indices, normals, uvs, position, Vector3.Back, voxels[x, y, z].type, ref index);
-                    if (z == ChunkSizeHorizontal - 1 || !voxels[x, y, z + 1].IsSolid || (blocks[x, y, z + 1] == 8 && blocks[x, y, z] != 8))
-                        AddFace(vertices, indices, normals, uvs, position, Vector3.Forward, voxels[x, y, z].type, ref index);
-                    
-                    if(GetBlock(x, y, z) == 8)
-                        mat.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;
+                    if (z == 0 || !voxels[x, y, z - 1].IsSolid || (IsTransparent(blocks[x, y, z - 1]) && !isCurrentTransparent))
+                        AddFace(targetVertices, targetIndices, targetNormals, targetUvs, position, Vector3.Back, voxels[x, y, z].type, ref targetIndex);
+                    if (z == ChunkSizeHorizontal - 1 || !voxels[x, y, z + 1].IsSolid || (IsTransparent(blocks[x, y, z + 1]) && !isCurrentTransparent))
+                        AddFace(targetVertices, targetIndices, targetNormals, targetUvs, position, Vector3.Forward, voxels[x, y, z].type, ref targetIndex);
                 }
             }
         }
         
-        //adds rendering data, vertexes, indices, normals, uvs and sets the mesh data
-        arrays.Resize((int)ArrayMesh.ArrayType.Max);
-        arrays[(int)ArrayMesh.ArrayType.Vertex] = vertices.ToArray();
-        arrays[(int)ArrayMesh.ArrayType.Normal] = normals.ToArray();
-        arrays[(int)ArrayMesh.ArrayType.Index] = indices.ToArray();
-        arrays[4] = uvs.ToArray();
-                    
+        // Build mesh with both opaque and transparent surfaces
         var mesh = new ArrayMesh();
-        mesh.AddSurfaceFromArrays(ArrayMesh.PrimitiveType.Triangles, arrays);
+        
+        // Add opaque surface (surface 0)
+        if (opaqueVertices.Count > 0)
+        {
+            var opaqueArrays = new Array();
+            opaqueArrays.Resize((int)ArrayMesh.ArrayType.Max);
+            opaqueArrays[(int)ArrayMesh.ArrayType.Vertex] = opaqueVertices.ToArray();
+            opaqueArrays[(int)ArrayMesh.ArrayType.Normal] = opaqueNormals.ToArray();
+            opaqueArrays[(int)ArrayMesh.ArrayType.Index] = opaqueIndices.ToArray();
+            opaqueArrays[4] = opaqueUvs.ToArray();
+            
+            mesh.AddSurfaceFromArrays(ArrayMesh.PrimitiveType.Triangles, opaqueArrays);
+        }
+        
+        // Add transparent surface (surface 1)
+        if (transparentVertices.Count > 0)
+        {
+            var transparentArrays = new Array();
+            transparentArrays.Resize((int)ArrayMesh.ArrayType.Max);
+            transparentArrays[(int)ArrayMesh.ArrayType.Vertex] = transparentVertices.ToArray();
+            transparentArrays[(int)ArrayMesh.ArrayType.Normal] = transparentNormals.ToArray();
+            transparentArrays[(int)ArrayMesh.ArrayType.Index] = transparentIndices.ToArray();
+            transparentArrays[4] = transparentUvs.ToArray();
+
+            mesh.AddSurfaceFromArrays(ArrayMesh.PrimitiveType.Triangles, transparentArrays);
+        }
+        
+        // Assign mesh first
         meshInstance.Mesh = mesh;
         
-        mat.AlbedoTexture = Godot.ResourceLoader.Load<Texture2D>("res://Textures/TextureAtlas.png");
-        mat.TextureFilter = BaseMaterial3D.TextureFilterEnum.Nearest;
-        mat.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
-        meshInstance.SetSurfaceOverrideMaterial(0, mat);
+        // Then set materials
+        if (opaqueVertices.Count > 0)
+        {
+            var opaqueMat = new StandardMaterial3D();
+            opaqueMat.AlbedoTexture = Godot.ResourceLoader.Load<Texture2D>("res://Textures/TextureAtlas.png");
+            opaqueMat.TextureFilter = BaseMaterial3D.TextureFilterEnum.Nearest;
+            opaqueMat.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
+            meshInstance.SetSurfaceOverrideMaterial(0, opaqueMat);
+        }
+        
+        if (transparentVertices.Count > 0)
+        {
+            var transparentMat = new StandardMaterial3D();
+            transparentMat.AlbedoTexture = Godot.ResourceLoader.Load<Texture2D>("res://Textures/TextureAtlas.png");
+            transparentMat.TextureFilter = BaseMaterial3D.TextureFilterEnum.Nearest;
+            transparentMat.ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded;
+            transparentMat.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;
+            transparentMat.CullMode = BaseMaterial3D.CullModeEnum.Disabled;
+            meshInstance.SetSurfaceOverrideMaterial(1, transparentMat);
+        }
 
-        if (indices.Count > 0)
+        // Set up collision (only for opaque blocks)
+        if (opaqueIndices.Count > 0)
         {
             var collision = new ConcavePolygonShape3D();
             collision.Data = mesh.GetFaces();
@@ -232,7 +287,6 @@ public partial class Chunk : Node3D
         {
             colliderShape.Shape = null;
         }
-        AddChild(collider);
     }
 
     //gets textures for each face per voxel type
